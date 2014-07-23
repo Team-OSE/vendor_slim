@@ -148,6 +148,7 @@ t1=$($DATE +%s)
 # setup environment
 echo -e ${bldblu}"Setting up environment"${txtrst}
 . build/envsetup.sh
+. vendor/ose/utils/chromium_prebuilt.sh
 
 # Remove system folder (this will create a new build.prop with updated build time and date)
 rm -f $OUTDIR/target/product/$device/system/build.prop
