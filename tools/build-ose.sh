@@ -12,17 +12,18 @@ usage()
     echo -e "        2 - make dirty"
     echo -e "        3 - make magicbrownies"
     echo -e "    -d  Use dex optimizations"
+    echo -e "    -f  Build with Prebuilt Chromium"
     echo -e "    -i  Static Initlogo"
     echo -e "    -j# Set jobs"
-    echo -e "    -s  Sync before build"
     echo -e "    -p  Build using pipe"
+    echo -e "    -s  Sync before build"
     echo -e "    -o# Select GCC O Level"
     echo -e "        Valid O Levels are"
     echo -e "        1 (Os) or 3 (O3)"
     echo -e "    -v  Verbose build output"
     echo -e ""
     echo -e ${txtbld}"  Example:"${txtrst}
-    echo -e "    ./build-ose.sh -c moto_msm8960dt"
+    echo -e "    ./build-ose.sh -c1 moto_msm8960dt"
     echo -e ""
     exit 1
 }
@@ -85,19 +86,21 @@ opt_clean=0
 opt_dex=0
 opt_initlogo=0
 opt_jobs="$CPUS"
-opt_sync=0
 opt_pipe=0
+opt_chromium=0
+opt_sync=0
 opt_olvl=0
 opt_verbose=0
 
-while getopts "c:dij:pso:v" opt; do
+while getopts "c:dfij:pso:v" opt; do
     case "$opt" in
     c) opt_clean="$OPTARG" ;;
     d) opt_dex=1 ;;
+    f) opt_chromium=1 ;;
     i) opt_initlogo=1 ;;
     j) opt_jobs="$OPTARG" ;;
-    s) opt_sync=1 ;;
     p) opt_pipe=1 ;;
+    s) opt_sync=1 ;;
     o) opt_olvl="$OPTARG" ;;
     v) opt_verbose=1 ;;
     *) usage
@@ -174,6 +177,10 @@ fi
 
 if [ "$opt_pipe" -ne 0 ]; then
     export TARGET_USE_PIPE=true
+fi
+
+if [ "$opt_chromium" -ne 0 ]; then
+    export USE_PREBUILT_CHROMIUM=1
 fi
 
 if [ "$opt_olvl" -eq 1 ]; then
